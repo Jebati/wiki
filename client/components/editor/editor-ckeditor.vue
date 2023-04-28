@@ -17,8 +17,8 @@
 <script>
 import _ from 'lodash'
 import { get, sync } from 'vuex-pathify'
-import DecoupledEditor from '@requarks/ckeditor5'
-// import DecoupledEditor from '../../../../wiki-ckeditor5/build/ckeditor'
+// import DecoupledEditor from '@requarks/ckeditor5'
+import DecoupledEditor from '../../../../ckeditor5/packages/ckeditor5-build-decoupled-document/build/ckeditor'
 import EditorConflict from './ckeditor/conflict.vue'
 import { html as beautify } from 'js-beautify/js/lib/beautifier.min.js'
 
@@ -100,11 +100,15 @@ export default {
     }, 300))
 
     this.$root.$on('editorInsert', opts => {
+      console.log(opts)
       switch (opts.kind) {
         case 'IMAGE':
-          this.editor.execute('imageInsert', {
+          const viewFragment = this.editor.data.processor.toView(`<span class="image-inline"><img src="${opts.path}"></img></span>`)
+          const modelFragment = this.editor.data.toModel(viewFragment)
+          this.editor.data.model.insertContent(modelFragment)
+          /* this.editor.execute('imageInsert', {
             source: opts.path
-          })
+          }) */
           break
         case 'BINARY':
           this.editor.execute('link', opts.path, {
