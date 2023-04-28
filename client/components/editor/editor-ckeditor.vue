@@ -103,12 +103,9 @@ export default {
       console.log(opts)
       switch (opts.kind) {
         case 'IMAGE':
-          const viewFragment = this.editor.data.processor.toView(`<span class="image-inline"><img src="${opts.path}"></img></span>`)
-          const modelFragment = this.editor.data.toModel(viewFragment)
-          this.editor.data.model.insertContent(modelFragment)
-          /* this.editor.execute('imageInsert', {
+          this.editor.execute('imageInsert', {
             source: opts.path
-          }) */
+          })
           break
         case 'BINARY':
           this.editor.execute('link', opts.path, {
